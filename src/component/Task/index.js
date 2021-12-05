@@ -61,24 +61,6 @@ const Task = () => {
             return (
               <div>
                 <h3> {ele.name} </h3>
-                {/* <button
-                  onClick={() => {
-                    deleteTask(ele._id);
-                  }}
-                >
-                  delete task
-                </button> */}
-                {/* <input
-                  onChange={(e) => {
-                    setUpdatedTask(e.target.value);
-                  }}
-                />
-                <RiPencilFill
-                  className="editBioIcno"
-                  onClick={() => {
-                    changeTask(ele._id);
-                  }}
-                /> */}
               </div>
             );
           })}
