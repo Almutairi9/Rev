@@ -1,73 +1,114 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
-const Task = () => {
-  const navigate = useNavigate();
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const [allTasks, setAllTasks] = useState([]);
-  const [token, setToken] = useState("");
-  const [newTask, setNewTask] = useState("");
+const Todos = ({ token }) => {
+  const [tasks, setTasks] = useState([]);
+  const [task, setTask] = useState("");
+  const [update, setUpdate] = useState("");
+
 
   useEffect(() => {
-    getAllTask();
+    getAllTasks();
   }, []);
 
-  const getAllTask = async () => {
-    let tokenn = localStorage.getItem("token");
-    let userID = localStorage.getItem("userID");
-
-    setToken(tokenn);
-    const tasks = await axios.post(`${BASE_URL}/todos`,
-      { reqUserId: userID },
-      {
-        headers: {
-          Authorization: `Bearer ${tokenn}`,
-        },
-      }
-    );
-    setAllTasks(tasks.data);
+  //get all tasks
+  const getAllTasks = async () => {
+    try {
+      const result = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/todos`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(result);
+      setTasks(result.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const addTask = async () => {
-    await axios.post(
-      `${BASE_URL}/todos`,
-      { user: localStorage.getItem("userID"), name: newTask },
-      {
+  // add new task
+  const addNewTask = async () => {
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/todos`,
+        {
+          name: task,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+    getAllTasks(token);
+  };
+
+  // edit task
+  const updateTask = async (id) => {
+    try {
+      await axios.put(
+        `${process.env.REACT_APP_BASE_URL}/updateTask/${id}`,
+        {
+          name: update,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      getAllTasks(token);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // delete task by id
+  const deleteTask = async (id) => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_BASE_URL}/deltask/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
-    );
-    getAllTask();
+      });
+      getAllTasks(token);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  return (
-    <div className="home">
-      <input
-        type="text"
-        placeholder="new task"
-        onChange={(e) => {
-          setNewTask(e.target.value);
-        }}
-      />
-      <button onClick={addTask}> add </button>
 
-      {!allTasks.length ? (
-        <h2> you dont have any tasks</h2>
-      ) : (
-        <div className="anim">
-          {allTasks.map((ele) => {
-            return (
-              <div>
-                <h3> {ele.name} </h3>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
+  return (
+    <>
+      <br />
+      <div>
+        <input
+          onChange={(e) => setTask(e.target.value)}
+          placeholder="add Tasks"
+        />
+        <button className="addBtn" onClick={addNewTask}>
+          Add New Task 
+        </button>
+      </div>
+      <div>
+        {tasks.length &&
+          tasks.map((item) => (
+            <>
+              <h2 key={item._id}>{item.name}</h2>
+              <button onClick={() => updateTask(item._id)}>Update</button>
+              <button onClick={() => deleteTask(item._id)}>Delete</button>
+            </>
+          ))}
+      </div>
+      <br />
+    </>
   );
 };
 
-export default Task;
+export default Todos;

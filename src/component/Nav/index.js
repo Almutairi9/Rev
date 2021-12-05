@@ -15,15 +15,6 @@ const Nav = () => {
         <nav className="navbar">
           <img src="/Newss.jpg" className="nav-logo" />  
           <ul className="nav-menu">
-            {/* <li className="nav-item">
-              <button
-                className="btn btn-primary"
-                type="submit"
-                onClick={() => navigate(`/Profile`)}
-              >
-                my profile{" "}
-              </button>
-            </li> */}
             <li className="nav-item">
               <button className="btn btn-primary" type="submit" onClick={logOut}>
                 Log out
