@@ -53,7 +53,7 @@ const Todos = ({ token }) => {
   const updateTask = async (id) => {
     try {
       await axios.put(
-        `${process.env.REACT_APP_BASE_URL}/updateTask/${id}`,
+        `${process.env.REACT_APP_BASE_URL}/todos/${id}`,
         {
           name: update,
         },
@@ -72,7 +72,7 @@ const Todos = ({ token }) => {
   // delete task by id
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BASE_URL}/deltask/${id}`, {
+      await axios.delete(`${process.env.REACT_APP_BASE_URL}/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
