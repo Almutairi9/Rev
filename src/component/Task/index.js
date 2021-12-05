@@ -5,73 +5,87 @@ import { useNavigate } from "react-router-dom";
 const Task = () => {
   const navigate = useNavigate();
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const token = localStorage.getItem("token");
-  const [data, setData] = useState([]);
-
-  const getTask = async () => {
-    try {
-        const result = await axios.get(`${BASE_URL}/todos`,{
-            headers: { Authorization: `bearer ${token}` },
-        });
-        console.log(result);
-        setData(result.data);
-    } catch (error) {
-        console.log(error);
-    }
-  };
-
-  const newTodo = async (e) => {
-    try {
-      e.preventDefault();
-      const result = await axios.post(`${BASE_URL}/todos`,
-        {
-          desc: e.target.todo.value,
-        },
-        {
-          headers: { Authorization: `bearer ${token}`},
-        }
-      );
-      console.log(result);
-      e.target.todo.value = "";
-      getTask();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [allTasks, setAllTasks] = useState([]);
+  const [token, setToken] = useState("");
+  const [newTask, setNewTask] = useState("");
 
   useEffect(() => {
-    getTask();
-  }, []); 
+    getAllTask();
+  }, []);
 
-  return(
-   <>
-    <div className='todo'>
-      <h1>Task:</h1>
-      <form onSubmit={newTodo} className='new'>
-        <p>New Task:</p>
-        <input type="text" name="todo" />
-        <br></br> <br></br> 
-        <button type="submit">Add</button>
-      </form>
-      {data.map((item) => {
-        return (
-          <div key={item._id}>
-            <h2 style={{ display: "inline" }}>{item.desc}</h2>
-            {/* <button onClick={() => del(item._id)}>x</button> */}
-            <br />
-          </div>
-        );
-      })}
+  const getAllTask = async () => {
+    let tokenn = localStorage.getItem("token");
+    let userID = localStorage.getItem("userID");
 
-      {/* <button
-        onClick={() => {
-          navigate("/");
+    setToken(tokenn);
+    const tasks = await axios.post(`${BASE_URL}/todos`,
+      { reqUserId: userID },
+      {
+        headers: {
+          Authorization: `Bearer ${tokenn}`,
+        },
+      }
+    );
+    setAllTasks(tasks.data);
+  };
+
+  const addTask = async () => {
+    await axios.post(
+      `${BASE_URL}/todos`,
+      { user: localStorage.getItem("userID"), name: newTask },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    getAllTask();
+  };
+
+  return (
+    <div className="home">
+      <input
+        type="text"
+        placeholder="new task"
+        onChange={(e) => {
+          setNewTask(e.target.value);
         }}
-      >
-        Back
-      </button> */}
+      />
+      <button onClick={addTask}> add </button>
+
+      {!allTasks.length ? (
+        <h2> you dont have any tasks</h2>
+      ) : (
+        <div className="anim">
+          {allTasks.map((ele) => {
+            return (
+              <div>
+                <h3> {ele.name} </h3>
+                {/* <button
+                  onClick={() => {
+                    deleteTask(ele._id);
+                  }}
+                >
+                  delete task
+                </button> */}
+                {/* <input
+                  onChange={(e) => {
+                    setUpdatedTask(e.target.value);
+                  }}
+                />
+                <RiPencilFill
+                  className="editBioIcno"
+                  onClick={() => {
+                    changeTask(ele._id);
+                  }}
+                /> */}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
-   </>)
+  );
 };
 
 export default Task;
