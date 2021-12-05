@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
-
+import "./style.css";
 
 const Nav = () => {
   const navigate = useNavigate();
@@ -13,10 +13,10 @@ const Nav = () => {
     <div>
       <header className="header">
         <nav className="navbar">
-          <img src="/Newss.jpg" className="nav-logo" />  
+          <img src="/task.jpg" alt="Task" className="nav-logo" />  
           <ul className="nav-menu">
             <li className="nav-item">
-              <button className="btn btn-primary" type="submit" onClick={logOut}>
+              <button className="btn" type="submit" onClick={logOut}>
                 Log out
               </button>
             </li>

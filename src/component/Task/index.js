@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Nav from "../../component/Nav";
 
 const Todos = ({ token }) => {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState("");
   const [update, setUpdate] = useState("");
-
 
   useEffect(() => {
     getAllTasks();
@@ -14,14 +15,11 @@ const Todos = ({ token }) => {
   //get all tasks
   const getAllTasks = async () => {
     try {
-      const result = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/todos`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const result = await axios.get(`${BASE_URL}/todos`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log(result);
       setTasks(result.data);
     } catch (error) {
@@ -33,7 +31,7 @@ const Todos = ({ token }) => {
   const addNewTask = async () => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/todos`,
+        `${BASE_URL}/todos`,
         {
           name: task,
         },
@@ -53,7 +51,7 @@ const Todos = ({ token }) => {
   const updateTask = async (id) => {
     try {
       await axios.put(
-        `${process.env.REACT_APP_BASE_URL}/todos/${id}`,
+        `${BASE_URL}/todos/${id}`,
         {
           name: update,
         },
@@ -72,7 +70,7 @@ const Todos = ({ token }) => {
   // delete task by id
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BASE_URL}/delete/${id}`, {
+      await axios.delete(`${BASE_URL}/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -83,20 +81,22 @@ const Todos = ({ token }) => {
     }
   };
 
-
   return (
     <>
+      <Nav />
       <br />
       <div>
         <input
           onChange={(e) => setTask(e.target.value)}
           placeholder="add Tasks"
-        />
-        <button className="addBtn" onClick={addNewTask}>
-          Add New Task 
+        />{" "}
+        <br />
+        <br />
+        <button className="btn" onClick={addNewTask}>
+          Add New Task
         </button>
       </div>
-      <div>
+      {/* <div>
         {tasks.length &&
           tasks.map((item) => (
             <>
@@ -105,7 +105,7 @@ const Todos = ({ token }) => {
               <button onClick={() => deleteTask(item._id)}>Delete</button>
             </>
           ))}
-      </div>
+      </div> */}
       <br />
     </>
   );

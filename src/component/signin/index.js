@@ -2,13 +2,15 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "./style.css";
+
 
 const Signin = () => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState([]);
+  const [role, setRole] = useState("61ac9c0e18af8c9793301155");
 
   const Sgin = async (e) => {
     try {
@@ -60,7 +62,7 @@ const Signin = () => {
             setPassword(e.target.value);
           }}
         />
-        <label for="e-mail">
+        {/* <label for="e-mail">
           <b>Enter you role :</b>
         </label>
         <input
@@ -71,10 +73,10 @@ const Signin = () => {
           id="role"
           required
           onChange={(e) => setRole(e.target.value)}
-        />
+        /> */}
         <hr />
         <button onClick={Sgin} type="submit" className="registerbtn">
-          signin
+        Signup
         </button>
       </form>
     </div>

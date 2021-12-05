@@ -11,11 +11,13 @@ function App() {
     <>
           <Routes>
           <Route exact path="/nav" element={<Nav />} />
-          <Route exact path="/" element={<Signin />} />
-          <Route exact path="/login" element={<Login />} />
           <Route exact path="/task" element={<Task />} />
         </Routes>
-
+        
+        <Routes>
+        <Route exact path="/" element={<Signin />} />
+          <Route exact path="/login" element={<Login />} />
+          </Routes>
     </>
   );
 }

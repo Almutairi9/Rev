@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "./style.css";
+
 
 const Login = () => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
